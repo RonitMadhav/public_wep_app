@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sentiment Analysis</h1>
+        <div class="input-container">
+            <label for="text-entry">Enter text to analyze:</label>
+            <textarea id="text-entry" rows="6" cols="50" placeholder="Enter text..."></textarea>
+        </div>
+        <button onclick="analyzeSentiment()">Analyze</button>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function analyzeSentiment() {
+            var text = document.getElementById("text-entry").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/analyze", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var result = JSON.parse(xhr.responseText);
+                    document.getElementById("result").innerText = "Sentiment: " + result.sentiment;
+                }
+            };
+            xhr.send(JSON.stringify({ text: text }));
+        }
+    </script>
+</body>
+</html>
